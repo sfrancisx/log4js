@@ -1,0 +1,29 @@
+This is Yahoo! Mail's implementation of log4js.  It started life as a full-featured implementation of log4js which was about 30K of compressed code.  I stripped out all of the stuff we didn't use and wound up with about 1K of compressed code (this includes the logging framework and the Ajax appender only.)
+
+* There are no log levels. Getting information from an end user's machine is expensive in a lot of ways. If it was important enough for me to find the log, I want to see all the log messages.
+
+* Only one appender of a type can be attached to a logger (this is a feature - see below).
+
+* There are no layouts.
+
+* There's no class structure, because there's no need for it.
+
+* log4js assumes it's a YUI module.
+
+Yahoo! Mail is a big application, being maintained by a big team. Many things are initialized on-demand. So the compose code, for example, doesn't know if the error logger exists, or if it has been initialized.  In the full-featured log4js implementation, it could do this:
+
+    var log = Log4js.getLogger("error");
+    log.setlevel(Log4js.Level.TRACE);
+    log.addAppender(new AjaxAppender());
+
+But what if some other component had already added an AjaxAppender? Suddenly, we'd start getting two copies of every error (this happened to us more than once.) Writing a log message wound up taking a ridiculous amount of code. Plus, of course, since the logger was 30K, it got loaded on-demand, so you couldn't assume it was there - your logging code had to be wrapped in a (potentially asynchronous) YUI.use() call.
+
+But with the simplified log4js, all we have to do is:
+
+    Log4js.getLogger("error", 1, "ajax").log("my log message");
+
+The logger is only 1K, so we added it to our launch payload. The getLogger() call allows me to specify an appender. You can only have one Ajax appender on the logger, so I don't have to verify that there isn't already one present.
+
+-Steve Francis
+sfrancisx@yahoo.com
+
