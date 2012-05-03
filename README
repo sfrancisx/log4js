@@ -1,4 +1,4 @@
-This is Yahoo! Mail's implementation of log4js.  It started life as a full-featured implementation of log4js which was about 30K of compressed code.  I stripped out all of the stuff we didn't use and wound up with about 1K of compressed code (this includes the logging framework and the Ajax appender only.)
+This is Yahoo! Mail's implementation of log4js.  It started life as a full-featured port of log4j which was about 30K of compressed code.  I stripped out all of the stuff we didn't use and wound up with about 1K of compressed code (this includes the logging framework and the Ajax appender only.)
 
 * There are no log levels. Getting information from an end user's machine is expensive in a lot of ways. If it was important enough for me to find the log, I want to see all the log messages.
 
